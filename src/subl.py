@@ -6,9 +6,14 @@ from plistlib import readPlist
 info = readPlist('info.plist')
 
 def main(wf):
-	for dir in os.listdir(info['variables']['PROJECTS_PATH']):
-		if dir != '.DS_Store': 
-			wf.add_item(title=dir, arg=info['variables']['PROJECTS_PATH'] + '/' + dir, valid=True, icon='icon/iu.png')
+	projects = info['variables']['PROJECTS_PATH']
+	for dir in os.listdir(projects):
+		if dir == '.DS_Store':
+			continue
+		if exists(projects + '/' + dir + '/' + dir + '.sublime-project'):
+			wf.add_item(title=dir, arg=projects + '/' + dir + '/' + dir + '.sublime-project', valid=True, icon='icon/iu.png')
+		else:
+			wf.add_item(title=dir, arg=projects + '/' + dir, valid=True, icon='icon/iu.png')
 	wf.send_feedback()
 
 if __name__ == u"__main__":
