@@ -1,16 +1,46 @@
 import sys
 import os
-from workflow import Workflow
-from plistlib import readPlist
+import json
+import plistlib
 
-info = readPlist('info.plist')
+with open('info.plist', 'rb') as fp:
+	info = plistlib.load(fp);
 
-def main(wf):
-	for dir in os.listdir(info['variables']['PROJECTS_PATH']):
-		if dir != '.DS_Store': 
-			wf.add_item(title=dir, arg=info['variables']['PROJECTS_PATH'] + '/' + dir, valid=True, icon='icon/iu.png')
-	wf.send_feedback()
+alfred_results = []
 
-if __name__ == u"__main__":
-    wf = Workflow()
-    sys.exit(wf.run(main))
+
+projects = info['variables']['PROJECTS_PATH']
+
+folderList = os.listdir(projects)
+
+
+sortedFolders = sorted(folderList)
+
+
+for dir in sortedFolders:
+	if dir == '.DS_Store':
+		continue
+	if os.path.exists(projects + '/' + dir + '/' + dir + '.sublime-project'):
+		result = {
+			"title": dir,
+			"arg": projects + '/' + dir + '/' + dir + '.sublime-project',
+			"icon": {
+				"path": "icon/iu.png"
+			}
+		}
+		alfred_results.append(result);
+	else:
+		result = {
+			"title": dir,
+			"arg": projects + '/' + dir,
+			"icon": {
+				"path": "icon/iu.png"
+			}
+		}
+		alfred_results.append(result);
+
+response = json.dumps({
+		"items": alfred_results
+	})
+
+sys.stdout.write(response)
