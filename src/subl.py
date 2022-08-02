@@ -10,7 +10,14 @@ alfred_results = []
 
 
 projects = info['variables']['PROJECTS_PATH']
-for dir in os.listdir(projects):
+
+folderList = os.listdir(projects)
+
+
+sortedFolders = sorted(folderList)
+
+
+for dir in sortedFolders:
 	if dir == '.DS_Store':
 		continue
 	if os.path.exists(projects + '/' + dir + '/' + dir + '.sublime-project'):
@@ -22,7 +29,6 @@ for dir in os.listdir(projects):
 			}
 		}
 		alfred_results.append(result);
-		# wf.add_item(title=dir, arg=projects + '/' + dir + '/' + dir + '.sublime-project', valid=True, icon='icon/iu.png')
 	else:
 		result = {
 			"title": dir,
@@ -32,7 +38,7 @@ for dir in os.listdir(projects):
 			}
 		}
 		alfred_results.append(result);
-		# wf.add_item(title=dir, arg=projects + '/' + dir, valid=True, icon='icon/iu.png')
+
 response = json.dumps({
 		"items": alfred_results
 	})
