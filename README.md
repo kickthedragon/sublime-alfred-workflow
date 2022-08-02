@@ -1,3 +1,7 @@
+# Version 2.0
+
+Version 2.0 now works with Python 3
+
 # SUBLIME ALFRED WORKFLOW
 
 Opens selected Project folder in Sublime Text
